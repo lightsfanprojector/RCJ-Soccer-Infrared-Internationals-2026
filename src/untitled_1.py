@@ -30,12 +30,42 @@ uart = UART(3, 115200)
 uart.init(115200, bits=8, parity=None, stop=1, timeout_char=1000)
 count = 0
 no_ball = False
+target = None
+
 while True:
     clock.tick()
     led2.on()
     img = sensor.snapshot()
-    goal = img.find_blobs([thresh_blue_goal], merge=True)
+
+
+    if target is None:
+        blobs = img.find_blobs(
+            [thresh_blue_goal, thresh_yellow_goal],
+            merge=True
+        )
+
+        candidates = [b for b in blobs if b.cx() < centre_x]
+
+        if candidates:
+            largest = max(candidates, key=lambda b: b.pixels())
+
+            if largest.code() == 1:
+                target = 'blue'
+            elif largest.code() == 2:
+                target = 'yellow'
+
+
+    if target == 'blue':
+        goal = img.find_blobs([thresh_blue_goal], merge=True)
+    elif target == 'yellow':
+        goal = img.find_blobs([thresh_yellow_goal], merge=True)
+    else:
+        goal = []
+
+    print(target)
+
     img.draw_cross(centre_x, centre_y)
+    # goal = img.find_blobs([thresh_yellow_goal], merge=True)
     if len(goal)>0:
         no_goal = False
         b = max(goal, key = lambda b:b.pixels())
