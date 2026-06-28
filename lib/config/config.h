@@ -38,81 +38,81 @@
 #define pika 1
 
 // // // //GREY
-#define BALL_INTENSITY 127 
-#define SE_speed 1
-#define SE_dir 26
-#define NE_speed 27 
-#define NE_dir 28
-#define SW_speed 18
-#define SW_dir 19
-#define NW_speed 20
-#define NW_dir 21
-#define SE_cw -1
-#define NE_cw 1
-#define NW_cw 1
-#define SW_cw -1
+// #define BALL_INTENSITY 127 
+// #define SE_speed 1
+// #define SE_dir 26
+// #define NE_speed 27 
+// #define NE_dir 28
+// #define SW_speed 18
+// #define SW_dir 19
+// #define NW_speed 20
+// #define NW_dir 21
+// #define SE_cw -1
+// #define NE_cw 1
+// #define NW_cw 1
+// #define SW_cw -1
 
-//grey
-#define US_L_I 15 //input: echo, output: trig
-#define US_L_O 14
-#define US_B_I 7
-#define US_B_O 6
-#define US_R_I 16
-#define US_R_O 17
-#define US_F_I 11
-#define US_F_O 10
+// //grey
+// #define US_L_I 15 //input: echo, output: trig
+// #define US_L_O 14
+// #define US_B_I 7
+// #define US_B_O 6
+// #define US_R_I 16
+// #define US_R_O 17
+// #define US_F_I 11
+// #define US_F_O 10
 
-#define L_m 0.0187
-#define L_c -41.4
-#define R_m 0.0181
-#define R_c -40.7
-#define F_m 0.0181
-#define F_c -41.9
-#define B_m 0.0201
-#define B_c -12.9
+// #define L_m 0.0187
+// #define L_c -41.4
+// #define R_m 0.0181
+// #define R_c -40.7
+// #define F_m 0.0181
+// #define F_c -41.9
+// #define B_m 0.0201
+// #define B_c -12.9
 
-#define FRONT_LIDAR_MAX 130.0 //calibrate 
-#define BACK_LIDAR_MAX 120.0 //calibrate 
+// #define FRONT_LIDAR_MAX 130.0 //calibrate 
+// #define BACK_LIDAR_MAX 120.0 //calibrate 
 
 
 ////////////////////////////////////////////////////////////
 
 //WHITE 
-// #define BALL_INTENSITY 125 //calibrate 
-// #define SE_dir 1 
-// #define SE_speed 27
-// #define NE_speed 26 
-// #define NE_dir 28
-// #define SW_speed 21
-// #define SW_dir 19
-// #define NW_speed 20
-// #define NW_dir 18
-// #define SE_cw -1
-// #define NE_cw 1
-// #define NW_cw 1
-// #define SW_cw 1
+#define BALL_INTENSITY 125
+#define SE_dir 1 
+#define SE_speed 27
+#define NE_speed 26 
+#define NE_dir 28
+#define SW_speed 21
+#define SW_dir 19
+#define NW_speed 20
+#define NW_dir 18
+#define SE_cw -1
+#define NE_cw 1
+#define NW_cw 1
+#define SW_cw 1
 
-// // white
-// #define US_L_I 15 //input: echo, output: trig
-// #define US_L_O 14
-// #define US_B_I 6
-// #define US_B_O 7
-// #define US_R_I 17
-// #define US_R_O 16
-// #define US_F_I 10
-// #define US_F_O 11
+// white
+#define US_L_I 15 //input: echo, output: trig
+#define US_L_O 14
+#define US_B_I 6
+#define US_B_O 7
+#define US_R_I 17
+#define US_R_O 16
+#define US_F_I 10
+#define US_F_O 11
 
-// #define L_m 0.0166
-// #define L_c -7.29
-// #define R_m 0.0165
-// #define R_c -6.34
-// #define F_m 0.017
-// #define F_c -7.31
-// #define B_m 0.0165
-// #define B_c -7.56
+#define L_m 0.0166
+#define L_c -7.29
+#define R_m 0.0165
+#define R_c -6.34
+#define F_m 0.017
+#define F_c -7.31
+#define B_m 0.0165
+#define B_c -7.56
 
-// #define FRONT_LIDAR_MAX 127.0 //calibrate 
-// #define BACK_LIDAR_MAX 120.0 //calibrate 
+#define FRONT_LIDAR_MAX 127.0 //calibrate 
+#define BACK_LIDAR_MAX 120.0 //calibrate 
 
 ///////////////////////////////////////////
 

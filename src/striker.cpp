@@ -63,6 +63,7 @@ void loop() {
   // Serial.print(" angle: ");
   // Serial.println(interpolate());
   // Serial.println(temt_boundary());
+  Serial.println(compass_angle());
 
 
 
@@ -98,13 +99,13 @@ void loop() {
         if (timesinceaim > 300) speed += 0.0002 * (timesinceaim - 300);
         digitalWrite(25, HIGH);
 
-        rotation = face_goal(read_camera());
+        // rotation = face_goal(read_camera());
+        rotation = compass_error();
 
-        if (get_x_pos() > 2000.0 && timesinceaim > 4000) { //kicker
-          digitalWrite(18, HIGH);
-          delay(50);
-          digitalWrite(18, LOW);
+        if (timesinceaim > 4000) { //kicker add if x pos greater
+          Serial2.write(1);
         }
+
 
       }
 

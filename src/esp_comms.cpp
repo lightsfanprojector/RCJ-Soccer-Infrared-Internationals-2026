@@ -28,6 +28,9 @@ void setup() {
     pinMode(13, INPUT);
     pinMode(25, INPUT);
     pinMode(4, INPUT);
+
+    pinMode(18, OUTPUT);
+    digitalWrite(18, LOW);
 }
 
 int temt_pin[7] = {27, 34, 32, 13, 39, 14, 33}; //clockwise, start from front
@@ -57,7 +60,7 @@ void loop() {
 
     data += (ballcap << 7);
     
-    Serial2.write(data);
+    // Serial2.write(data);
 
     // delay(10);
 
@@ -74,4 +77,13 @@ void loop() {
     }
   Serial.println("");
   // Serial.println(data);
+
+  if (Serial2.available()){
+      if (Serial2.read() == 1){
+        digitalWrite(18, HIGH);
+        delay(50);
+        digitalWrite(18, LOW);
+      }
+
+}
 }
