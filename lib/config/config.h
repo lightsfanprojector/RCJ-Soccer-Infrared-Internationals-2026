@@ -20,7 +20,7 @@
 #define OUT_FIELD_SIZE 140 // 3005 //mm, out of bounds area
 #define OUT_PENALTY_SIZE 390 //mm, out of bounds area + penalty size 25+25+2
 
-#define BCZ_ANGLE_LEFT 355.0 //CALLIRATEEEEEEEEEEEEEEE MEASUREEEEE
+#define BCZ_ANGLE_LEFT 355.0 
 #define BCZ_ANGLE_RIGHT 29.0
 
 
@@ -38,7 +38,7 @@
 #define pika 1
 
 // // // //GREY
-#define BALL_INTENSITY 127
+#define BALL_INTENSITY 127 
 #define SE_speed 1
 #define SE_dir 26
 #define NE_speed 27 
@@ -71,14 +71,14 @@
 #define B_m 0.0201
 #define B_c -12.9
 
-#define FRONT_LIDAR_MAX 130.0
-#define BACK_LIDAR_MAX 120.0
+#define FRONT_LIDAR_MAX 130.0 //calibrate 
+#define BACK_LIDAR_MAX 120.0 //calibrate 
 
 
 ////////////////////////////////////////////////////////////
 
-//WHITE
-// #define BALL_INTENSITY 125
+//WHITE 
+// #define BALL_INTENSITY 125 //calibrate 
 // #define SE_dir 1 
 // #define SE_speed 27
 // #define NE_speed 26 
@@ -111,8 +111,8 @@
 // #define B_m 0.0165
 // #define B_c -7.56
 
-// #define FRONT_LIDAR_MAX 127.0
-// #define BACK_LIDAR_MAX 120.0
+// #define FRONT_LIDAR_MAX 127.0 //calibrate 
+// #define BACK_LIDAR_MAX 120.0 //calibrate 
 
 ///////////////////////////////////////////
 
@@ -121,7 +121,7 @@
 #define BACK_LIDAR_SDA 8
 #define BACK_LIDAR_SCL 9
 
-#define BCZ_PIN 26
+#define BCZ_PIN 26 
 #define BCZ_THRESH 20
 
 #else

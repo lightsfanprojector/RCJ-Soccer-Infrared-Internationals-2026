@@ -24,8 +24,8 @@ roi_width=280
 centre_x = 158
 centre_y = 128
 thresh_ball = (43, 76, 27, 53, 18, 57)
-thresh_yellow_goal = (41, 50, 1, 14, 26, 50)
-thresh_blue_goal = (18, 33, 19, -3, -128, -24)
+thresh_yellow_goal = (41, 50, 1, 14, 26, 50) #here calibrate this if not working
+thresh_blue_goal = (18, 33, 19, -3, -128, -24) #here calibrate this if not working
 uart = UART(3, 115200)
 uart.init(115200, bits=8, parity=None, stop=1, timeout_char=1000)
 count = 0

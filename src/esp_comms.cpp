@@ -1,5 +1,16 @@
 #include <Arduino.h>
 
+//calibrate thresholds for each bot, PLEASE change the correct one 
+//white and grey are the 2 bots, the colour of the mirror print
+//comment out whichever one u r not testing 
+//run this file
+//the first number is for the temt in front, the next is the one to the right
+//(?? possibly? if it looks weird then its the left one)
+//if the temt is on a white line, the value will be quite high like >3000
+//put on the green part and it will be lower
+//so u set the threshold so that if reading > threshold, then it is white 
+//set it abit lower (like 100 lower) so that the range for white is not too narrow
+
 
 uint8_t data = 0; 
 // int white_value = 0; 
