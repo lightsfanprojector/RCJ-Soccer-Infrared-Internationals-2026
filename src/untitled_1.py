@@ -13,8 +13,8 @@ sensor.set_auto_exposure(False, exposure_us=8000)
 sensor.set_auto_gain(False, gain_db=4)
 sensor.skip_frames(time=200)
 clock = time.clock()
-led2 = pyb.LED(2)
-led2.on()
+# led2 = pyb.LED(2)
+# led2.on()
 window_x = 196
 window_y = 125
 window_width = 280
@@ -24,45 +24,50 @@ roi_width=280
 centre_x = 158
 centre_y = 128
 thresh_ball = (43, 76, 27, 53, 18, 57)
-thresh_yellow_goal = (45, 100, -25, 15, 24, 72)
-thresh_blue_goal = (16, 22, -24, 5, -32, -1)
+thresh_yellow_goal = (41, 50, 1, 14, 26, 50)
+thresh_blue_goal = (18, 33, 19, -3, -128, -24)
 uart = UART(3, 115200)
 uart.init(115200, bits=8, parity=None, stop=1, timeout_char=1000)
 count = 0
 no_ball = False
 target = None
 
-while True:
-    clock.tick()
-    led2.on()
-    img = sensor.snapshot()
+img = sensor.snapshot()
 
-
-    if target is None:
+if target is None:
+    candidates = []
+    while len(candidates) < 1:
+        img = sensor.snapshot()
         blobs = img.find_blobs(
             [thresh_blue_goal, thresh_yellow_goal],
-            merge=True
-        )
-
+            merge=True)
         candidates = [b for b in blobs if b.cx() < centre_x]
 
-        if candidates:
-            largest = max(candidates, key=lambda b: b.pixels())
+    if candidates:
+        largest = max(candidates, key=lambda b: b.pixels())
 
-            if largest.code() == 1:
-                target = 'blue'
-            elif largest.code() == 2:
-                target = 'yellow'
+        if largest.code() == 1:
+            target = 'blue'
+        elif largest.code() == 2:
+            target = 'yellow'
+
+while True:
+    clock.tick()
+    # led2.on()
+    img = sensor.snapshot()
+    print(target)
 
 
     if target == 'blue':
         goal = img.find_blobs([thresh_blue_goal], merge=True)
+        led3 = pyb.LED(3)
+        led3.on()
     elif target == 'yellow':
         goal = img.find_blobs([thresh_yellow_goal], merge=True)
+        led1 = pyb.LED(1)
+        led1.on()
     else:
         goal = []
-
-    print(target)
 
     img.draw_cross(centre_x, centre_y)
     # goal = img.find_blobs([thresh_yellow_goal], merge=True)

@@ -51,5 +51,13 @@ void setup() {
 
 void loop() {
   read_camera();
+  // if (digitalRead(22) == 0) { //switch 
+  //   drive2(0.0, 0.0, 0.0);
+  // }
+  // drive2(0.0, face_goal(read_camera()), 0.1);
+  // drive(0.0, 0.1);
+  // run_motor(0.1, 1, 26, 1);
+  send_us();
+  print_us();
 
 }

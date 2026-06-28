@@ -37,6 +37,8 @@ void setup() {
   pinMode(21, OUTPUT); 
   pinMode(25, OUTPUT);
 
+  pinMode(18, OUTPUT);
+  digitalWrite(18, LOW);
   //two hardware serials for pico, serial1 (gpio1) for printing in monitor, serial (gpio0) for openmv (can set pins, openmv side uart)
   //ask if can use software serial (serial 2) for bluetooth comms with other bot????? or? 
 

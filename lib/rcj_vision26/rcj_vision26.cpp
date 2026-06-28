@@ -144,9 +144,14 @@ double compass_error() { //paramter???
   return ang; 
 }
 
+double face_goal(double goal_angle) {
+  double ang = compass_angle() - goal_angle;
+  if (ang > 180.0) ang -= 360.0;
+  if (ang < -180.0) ang += 360.0;
+  ang /= -45.0;
+  return ang; 
+}
 
-
-//essentially rotation rate, -45 is a constant to tune, if bot is >45 off then its max rotatino rate
 double get_basic_angle(double ang) {
   if (ang < 90.0) return ang;
   else if (ang < 180.0) return 180.0 - ang;
@@ -172,7 +177,8 @@ int getirback(byte commandd) {
   return (Wire.read());
 }
 
-int ir_channels[] = {0, 5, 6, 7, 1, 2, 3, 4}; 
+
+int ir_channels[] = {0, 5, 6, 7, 1, 2, 3, 4};
 int front_ir_ang[] = {0, 360, 330, 300, 270, 450, 420, 390};
 int back_ir_ang[] = {0, 180, 150, 120, 90, 270, 240, 210};
 
@@ -183,72 +189,57 @@ int interpolate() {
   int maxbackport = getirback(8);
   int leftval, rightval;
   int leftportang, rightportang, maxportang;
-  bool side = false;
   if (maxfrontval > maxbackval) {
-    // Serial.println("front");
     if (maxfrontport == 1) {
       // edgy
-      side = true;
-      leftval = getirfront(4);
-      rightval = getirback(6); //flipped 
+      leftval = getirfront(3);
+      rightval = getirback(5);
       maxportang = 90;
       rightportang = 90;
       leftportang = 60;
     }
     else if (maxfrontport == 7) {
       // also edgy
-      side = true;
-      leftval = getirback(5); // i think 4
-      rightval = getirfront(3); // yessies //?????what? 6
+      leftval = getirback(4); // i think
+      rightval = getirfront(6); // yessies
       maxportang = 270;
       leftportang = 270;
       rightportang = 300;
     }
     else {
-      leftval = getirfront(ir_channels[maxfrontport+1]);
-      rightval = getirfront(ir_channels[maxfrontport-1]);
+      leftval = getirfront(ir_channels[maxfrontport-1]);
+      rightval = getirfront(ir_channels[maxfrontport+1]);
       maxportang = front_ir_ang[ir_channels[maxfrontport]];
-      leftportang = front_ir_ang[ir_channels[maxfrontport+1]];
-      rightportang = front_ir_ang[ir_channels[maxfrontport-1]]; //flipp
+      leftportang = front_ir_ang[ir_channels[maxfrontport-1]];
+      rightportang = front_ir_ang[ir_channels[maxfrontport+1]];
     }
   }
   else {
-    // Serial.println("back");
     // back is maximum
     // edgies
     if (maxbackport == 1) {
-      side = true;
-      rightval = getirfront(4); // i think
-      leftval = getirback(6); // yessies
+      rightval = getirfront(5); // i think
+      leftval = getirback(3); // yessies
       maxportang = 270;
       leftportang = 240;
       rightportang = 270;
     }
     else if (maxbackport == 7) {
-      side = true;
-      leftval = getirfront(3);
-      rightval = getirback(5);
+      leftval = getirfront(4);
+      rightval = getirback(6);
       maxportang = 90;
       rightportang = 120;
       leftportang = 90;
     }
     else {
-      leftval = getirback(ir_channels[maxbackport+1]);
-      rightval = getirback(ir_channels[maxbackport-1]);
+      leftval = getirback(ir_channels[maxbackport-1]);
+      rightval = getirback(ir_channels[maxbackport+1]);
       maxportang = back_ir_ang[ir_channels[maxbackport]];
-      leftportang = back_ir_ang[ir_channels[maxbackport+1]];
-      rightportang = back_ir_ang[ir_channels[maxbackport-1]]; //flipped
+      leftportang = back_ir_ang[ir_channels[maxbackport-1]];
+      rightportang = back_ir_ang[ir_channels[maxbackport+1]];
     }
   }
-  double leftdiff, rightdiff;
-  double ratio, a, b, x, y; 
-  int new_ang;
-  //tune this stuff
-  int idkmanthresh = 3;
-  int h = 10;
-  int w = 7;
-  bool left = false;
-
+  int leftdiff, rightdiff; 
   if (maxfrontval > maxbackval) {
     rightdiff = maxfrontval - rightval;
     leftdiff = maxfrontval - leftval;
@@ -257,85 +248,182 @@ int interpolate() {
     rightdiff = maxbackval - rightval;
     leftdiff = maxbackval - leftval;
   }
-  // Serial.print("left diff: ");
-  // Serial.println(leftdiff);
-  // Serial.print("right diff:");
-  // Serial.println(rightdiff);
-
-  if (leftdiff == 0) leftdiff = 1;
-  if (rightdiff == 0) rightdiff = 1;
-
-  if (maxfrontval > maxbackval && maxfrontport == 7) {
-    // Serial.println("front left");
-    ratio = leftdiff / rightdiff;
-    left = true;
-    
-    a = getirfront(4) * -1.04 + 82.8;
-    b = getirback(5) * -1.0 + 65.0;
-  }
-
-  else if (maxfrontval > maxbackval && maxfrontport == 1) {
-    ratio = rightdiff / leftdiff;
-    // Serial.println("front right");
-    a = getirfront(5) * -0.444 + 56.7; 
-    b = getirback(4) * -0.8 + 58;
-  }
-
-  else if (maxbackval >= maxfrontval && maxbackport == 1) {
-    // Serial.println("back left");
-    ratio = leftdiff / rightdiff;
-    left = true;
-    a = getirfront(4) * -1.04 + 82.8; 
-    b = getirback(5) * -1.0 + 65.0;
-  }
-
-  else if (maxbackval >= maxfrontval && maxbackport == 7) {
-    ratio = rightdiff / leftdiff;
-    // Serial.println("back right");
-    a = getirfront(5) * -0.444 + 56.7; 
-    b = getirback(4) * -0.8 + 58;
-  }
-    
-  if (ratio > idkmanthresh){
-    side = false;
-  }
-
-  // Serial.print(ratio);
-  // Serial.print(" ");
-  // Serial.println(side);
-
-  if (side) {
-    int angle; 
-    angle = acos((b*b + h*h - a*a)/ (2*b*h)); 
-    // x = b * sin(angle) + w/2;
-    y = b * cos(angle) - h/2;
-    if (left){
-      x = b * sin(angle) + w/2;
-      new_ang = int(90.0 - (atan2(y, x) * 180.0 / PI)) % 360; //270+ 
-    }
-    else {
-      x = b * sin(angle) + w/2;
-      new_ang = int(90.0 - (atan2(y, x) * 180.0 / PI)) % 360;
-    }
-  }
-
-  else {
-  int const_val;
+  int new_ang, const_val;
   if (leftdiff < rightdiff) { // closer to left
     const_val = abs(maxportang - leftportang) / 2;
-    new_ang = (maxportang - (const_val - int(((double)leftdiff/(double)rightdiff) * (double)const_val))) % 360;
-  } //first sign flipped
+    new_ang = (maxportang + (const_val - int(((double)leftdiff/(double)rightdiff) * (double)const_val))) % 360;
+  }
   else {
     const_val = abs(maxportang - rightportang) / 2;
-    new_ang = (maxportang + (const_val - int(((double)rightdiff/(double)leftdiff) * (double)const_val))) % 360;
-  } //first sign fipped
+    new_ang = (maxportang - (const_val - int(((double)rightdiff/(double)leftdiff) * (double)const_val))) % 360;
   }
-  // if (new_ang < 20){
-  //   new_ang -= 15; 
-  //   if (new_ang < 0) new_ang += 360;
-  // }
   return new_ang;
 }
+
+// int ir_channels[] = {0, 5, 6, 7, 1, 2, 3, 4}; 
+// int front_ir_ang[] = {0, 360, 330, 300, 270, 450, 420, 390};
+// int back_ir_ang[] = {0, 180, 150, 120, 90, 270, 240, 210};
+
+// int interpolate() {
+//   int maxfrontval = getirfront(9);
+//   int maxfrontport = getirfront(8);
+//   int maxbackval = getirback(9);
+//   int maxbackport = getirback(8);
+//   int leftval, rightval;
+//   int leftportang, rightportang, maxportang;
+//   bool side = false;
+//   if (maxfrontval > maxbackval) {
+//     // Serial.println("front");
+//     if (maxfrontport == 1) {
+//       // edgy
+//       side = true;
+//       leftval = getirfront(4);
+//       rightval = getirback(6); //flipped 
+//       maxportang = 90;
+//       rightportang = 90;
+//       leftportang = 60;
+//     }
+//     else if (maxfrontport == 7) {
+//       // also edgy
+//       side = true;
+//       leftval = getirback(5); // i think 4
+//       rightval = getirfront(3); // yessies //?????what? 6
+//       maxportang = 270;
+//       leftportang = 270;
+//       rightportang = 300;
+//     }
+//     else {
+//       leftval = getirfront(ir_channels[maxfrontport+1]);
+//       rightval = getirfront(ir_channels[maxfrontport-1]);
+//       maxportang = front_ir_ang[ir_channels[maxfrontport]];
+//       leftportang = front_ir_ang[ir_channels[maxfrontport+1]];
+//       rightportang = front_ir_ang[ir_channels[maxfrontport-1]]; //flipp
+//     }
+//   }
+//   else {
+//     // Serial.println("back");
+//     // back is maximum
+//     // edgies
+//     if (maxbackport == 1) {
+//       side = true;
+//       rightval = getirfront(4); // i think
+//       leftval = getirback(6); // yessies
+//       maxportang = 270;
+//       leftportang = 240;
+//       rightportang = 270;
+//     }
+//     else if (maxbackport == 7) {
+//       side = true;
+//       leftval = getirfront(3);
+//       rightval = getirback(5);
+//       maxportang = 90;
+//       rightportang = 120;
+//       leftportang = 90;
+//     }
+//     else {
+//       leftval = getirback(ir_channels[maxbackport+1]);
+//       rightval = getirback(ir_channels[maxbackport-1]);
+//       maxportang = back_ir_ang[ir_channels[maxbackport]];
+//       leftportang = back_ir_ang[ir_channels[maxbackport+1]];
+//       rightportang = back_ir_ang[ir_channels[maxbackport-1]]; //flipped
+//     }
+//   }
+//   double leftdiff, rightdiff;
+//   double ratio, a, b, x, y; 
+//   int new_ang;
+//   //tune this stuff
+//   int idkmanthresh = 3;
+//   int h = 10;
+//   int w = 7;
+//   bool left = false;
+
+//   if (maxfrontval > maxbackval) {
+//     rightdiff = maxfrontval - rightval;
+//     leftdiff = maxfrontval - leftval;
+//   }
+//   else {
+//     rightdiff = maxbackval - rightval;
+//     leftdiff = maxbackval - leftval;
+//   }
+//   // Serial.print("left diff: ");
+//   // Serial.println(leftdiff);
+//   // Serial.print("right diff:");
+//   // Serial.println(rightdiff);
+
+//   if (leftdiff == 0) leftdiff = 1;
+//   if (rightdiff == 0) rightdiff = 1;
+
+//   if (maxfrontval > maxbackval && maxfrontport == 7) {
+//     // Serial.println("front left");
+//     ratio = leftdiff / rightdiff;
+//     left = true;
+    
+//     a = getirfront(4) * -1.04 + 82.8;
+//     b = getirback(5) * -1.0 + 65.0;
+//   }
+
+//   else if (maxfrontval > maxbackval && maxfrontport == 1) {
+//     ratio = rightdiff / leftdiff;
+//     // Serial.println("front right");
+//     a = getirfront(5) * -0.444 + 56.7; 
+//     b = getirback(4) * -0.8 + 58;
+//   }
+
+//   else if (maxbackval >= maxfrontval && maxbackport == 1) {
+//     // Serial.println("back left");
+//     ratio = leftdiff / rightdiff;
+//     left = true;
+//     a = getirfront(4) * -1.04 + 82.8; 
+//     b = getirback(5) * -1.0 + 65.0;
+//   }
+
+//   else if (maxbackval >= maxfrontval && maxbackport == 7) {
+//     ratio = rightdiff / leftdiff;
+//     // Serial.println("back right");
+//     a = getirfront(5) * -0.444 + 56.7; 
+//     b = getirback(4) * -0.8 + 58;
+//   }
+    
+//   if (ratio > idkmanthresh){
+//     side = false;
+//   }
+
+//   // Serial.print(ratio);
+//   // Serial.print(" ");
+//   // Serial.println(side);
+
+//   if (side) {
+//     int angle; 
+//     angle = acos((b*b + h*h - a*a)/ (2*b*h)); 
+//     // x = b * sin(angle) + w/2;
+//     y = b * cos(angle) - h/2;
+//     if (left){
+//       x = b * sin(angle) + w/2;
+//       new_ang = int(90.0 - (atan2(y, x) * 180.0 / PI)) % 360; //270+ 
+//     }
+//     else {
+//       x = b * sin(angle) + w/2;
+//       new_ang = int(90.0 - (atan2(y, x) * 180.0 / PI)) % 360;
+//     }
+//   }
+
+//   else {
+//   int const_val;
+//   if (leftdiff < rightdiff) { // closer to left
+//     const_val = abs(maxportang - leftportang) / 2;
+//     new_ang = (maxportang - (const_val - int(((double)leftdiff/(double)rightdiff) * (double)const_val))) % 360;
+//   } //first sign flipped
+//   else {
+//     const_val = abs(maxportang - rightportang) / 2;
+//     new_ang = (maxportang + (const_val - int(((double)rightdiff/(double)leftdiff) * (double)const_val))) % 360;
+//   } //first sign fipped
+//   }
+//   // if (new_ang < 20){
+//   //   new_ang -= 15; 
+//   //   if (new_ang < 0) new_ang += 360;
+//   // }
+//   return new_ang;
+// }
 
 int orbit_ball() {
   double ang = (double)interpolate();
@@ -912,7 +1000,7 @@ double temt_boundary(){
 uint8_t cam_data = 0; 
 double goal_angle; 
 
-void read_camera(){
+double read_camera(){
     if (Serial1.available()){
         cam_data = Serial1.read();
         Serial.println("reading");
@@ -920,5 +1008,6 @@ void read_camera(){
         Serial.print("Goal Angle: ");
         Serial.println(goal_angle);
     }
+    return goal_angle;
 }
 

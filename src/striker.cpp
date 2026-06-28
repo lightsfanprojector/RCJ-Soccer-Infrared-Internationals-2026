@@ -17,6 +17,11 @@ void setup() {
     // int8_t tx = 4;
   Serial2.setRX(5);
   Serial2.begin(9600);
+
+  Serial1.setTX(12);
+  Serial1.setRX(13);
+  Serial1.begin(115200);
+
   Serial.begin(9600);
 
   pinMode(22, INPUT);
@@ -34,6 +39,9 @@ void setup() {
   pinMode(20, OUTPUT); 
   pinMode(21, OUTPUT); 
   pinMode(25, OUTPUT);
+  pinMode(18, OUTPUT);
+
+  digitalWrite(18, LOW);
 
   //two hardware serials for pico, serial1 (gpio1) for printing in monitor, serial (gpio0) for openmv (can set pins, openmv side uart)
   //ask if can use software serial (serial 2) for bluetooth comms with other bot????? or? 
@@ -50,24 +58,19 @@ void loop() {
   // print_us();
 
   // Serial.println(in_bcz());
-  Serial.print("intensity: ");
-  Serial.print(getirfront(9));
-  Serial.print(" angle: ");
-  Serial.println(interpolate());
+  // Serial.print("intensity: ");
+  // Serial.print(getirfront(9));
+  // Serial.print(" angle: ");
+  // Serial.println(interpolate());
   // Serial.println(temt_boundary());
-  Serial.println(in_bcz());
 
 
 
-  
-
-  double angle, speed; 
-  
-  // Serial.println(speed);
+  double angle, speed, rotation; 
   
   read_temts();
 
-  if (digitalRead(22) == 0) {
+  if (digitalRead(22) == 0) { //switch 
     drive2(0.0, 0.0, 0.0);
   }
   else {
@@ -95,11 +98,20 @@ void loop() {
         if (timesinceaim > 300) speed += 0.0002 * (timesinceaim - 300);
         digitalWrite(25, HIGH);
 
+        rotation = face_goal(read_camera());
+
+        if (get_x_pos() > 2000.0 && timesinceaim > 4000) { //kicker
+          digitalWrite(18, HIGH);
+          delay(50);
+          digitalWrite(18, LOW);
+        }
+
       }
 
       else if (getirfront(9) < 10 && getirback(9) < 10) {
         angle = move_to_point(get_x_pos(), get_y_pos(), 910.0, 1215.0);
         speed = 0.3;
+        rotation = compass_error();
         digitalWrite(25, LOW);
       }
 
@@ -107,6 +119,7 @@ void loop() {
         digitalWrite(25, LOW);
         angle = orbit_ball();
         speed = 0.3;
+        rotation = compass_error();
       }
 
       // digitalWrite(25, LOW);
@@ -114,14 +127,8 @@ void loop() {
     slow_down(speed, angle, get_x_pos(), get_y_pos());
     upd_conf(get_slowdown_angle(), get_slowdown_speed());
     // upd_conf(angle, speed);
-    drive2(get_conf_angle(), compass_error(), get_conf_speed());
-    
-    // Serial.println(get_conf_speed());
-    // drive2(0.0, 0.0, 0.0);
+    drive2(get_conf_angle(), rotation, get_conf_speed());
   }
-
-  
-
 
 
   // drive(90.0, 0.2);

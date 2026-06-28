@@ -19,7 +19,7 @@ void setup() {
     pinMode(4, INPUT);
 }
 
-int temt_pin[7] = {27, 34, 39, 33, 32, 13, 25}; //clockwise, start from front
+int temt_pin[7] = {27, 34, 32, 13, 39, 14, 33}; //clockwise, start from front
 // //white
 // int thresholds[7] = {3000, 2400, 3000, 3000, 2900, 2900, 2900};
 

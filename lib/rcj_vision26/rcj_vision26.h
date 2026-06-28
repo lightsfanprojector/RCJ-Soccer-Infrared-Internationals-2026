@@ -76,6 +76,7 @@ double get_ball_y();
 
 ///////////////////////////////////////////////////////////
 
-void read_camera();
+double read_camera();
+double face_goal(double goal_angle);
 
 #endif

@@ -12,10 +12,12 @@ void setup() {
 
 
 void loop() {
-
+    Serial.println("test");
     digitalWrite(18, HIGH);
     delay(50);
     digitalWrite(18, LOW);
     delay(3000);
+
+    
      
 }
