@@ -6,7 +6,8 @@
 #define GOALIE 1
 #define STRIKER 0
 
-#define ROBOT_DIAMETER 180.0 //mm
+
+#define ROBOT_DIAMETER 180.0 //mm271
 
 #define FIELD_X 1820.0 //mm
 #define MID_X 910.0
@@ -20,8 +21,8 @@
 #define OUT_FIELD_SIZE 140 // 3005 //mm, out of bounds area
 #define OUT_PENALTY_SIZE 390 //mm, out of bounds area + penalty size 25+25+2
 
-#define BCZ_ANGLE_LEFT 355.0 
-#define BCZ_ANGLE_RIGHT 29.0
+#define BCZ_ANGLE_LEFT 330// 355.0 
+#define BCZ_ANGLE_RIGHT 39 //29.0
 
 
 //////////////////////////////new!!!
@@ -37,8 +38,8 @@
 #ifdef PIKACHU
 #define pika 1
 
-// // // //GREY
-// #define BALL_INTENSITY 127 
+// // // // //GREY
+// #define BALL_INTENSITY 127
 // #define SE_speed 1
 // #define SE_dir 26
 // #define NE_speed 27 
@@ -78,7 +79,7 @@
 ////////////////////////////////////////////////////////////
 
 //WHITE 
-#define BALL_INTENSITY 125
+#define BALL_INTENSITY 125 //calibrate 
 #define SE_dir 1 
 #define SE_speed 27
 #define NE_speed 26 
@@ -93,7 +94,7 @@
 #define SW_cw 1
 
 // white
-#define US_L_I 15 //input: echo, output: trig
+#define US_L_I 15 //D input: echo, output:: trig
 #define US_L_O 14
 #define US_B_I 6
 #define US_B_O 7
@@ -114,8 +115,8 @@
 #define FRONT_LIDAR_MAX 127.0 //calibrate 
 #define BACK_LIDAR_MAX 120.0 //calibrate 
 
-///////////////////////////////////////////
-
+// ////////////////////////////////////////////
+//DO NOT DELETE THIS
 #define FRONT_LIDAR_SDA 2 
 #define FRONT_LIDAR_SCL 3
 #define BACK_LIDAR_SDA 8
@@ -124,82 +125,6 @@
 #define BCZ_PIN 26 
 #define BCZ_THRESH 20
 
-#else
-#define pika 0
-
-//bot two config
-//do later
-
-// #define SE_speed 6
-// #define SE_dir 14
-// #define NE_speed 7 
-// #define NE_dir 15
-// #define SW_speed 2
-// #define SW_dir 3
-// #define NW_speed 4
-// #define NW_dir 5
-// #define SE_cw 1
-// #define NE_cw -1
-// #define NW_cw -1
-// #define SW_cw -1
-
-
-// #define SE_dir 26
-// #define NE_speed 27 
-// #define NE_dir 28
-// #define SW_speed 21
-// #define SW_dir 19
-// #define NW_speed 20
-// #define NW_dir 18
-// #define SE_cw -1
-// #define NE_cw 1
-// #define NW_cw 1
-// #define SW_cw -1
-
-// #define SE_speed 27
-// #define SE_dir 28
-// #define NE_speed 26 
-// #define NE_dir 1
-// #define SW_speed 18
-// #define SW_dir 19
-// #define NW_speed 20
-// #define NW_dir 21
-// #define SE_cw -1
-// #define NE_cw 1
-// #define NW_cw 1
-// #define SW_cw -1
-
-#define SE_dir 28 ///correct
-#define SE_speed 27
-#define NE_speed 26 
-#define NE_dir 1
-#define SW_speed 21
-#define SW_dir 19
-#define NW_speed 20
-#define NW_dir 18
-#define SE_cw -1
-#define NE_cw 1
-#define NW_cw 1
-#define SW_cw -1
-
-#define US_L_I 0 //input: echo, output: trig
-#define US_L_O 1
-#define US_B_I 22
-#define US_B_O 27
-#define US_R_I 21
-#define US_R_O 20
-#define US_F_I 18
-#define US_F_O 19
-
-#define FRONT_LIDAR_MAX 110.0
-#define BACK_LIDAR_MAX 120.0
-#define FRONT_LIDAR_SDA 12 
-#define FRONT_LIDAR_SCL 13
-#define BACK_LIDAR_SDA 10
-#define BACK_LIDAR_SCL 11
-
-#define BCZ_PIN 26
-#define BCZ_THRESH 85
 
 #endif
 

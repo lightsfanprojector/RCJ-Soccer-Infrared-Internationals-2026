@@ -58,25 +58,25 @@ void loop() {
   //if this is not working then its probably the camera thresholds, download openmv IDE and put 'untitled_1.py' into it, 
   //then change the colour thresholds for yellow and blue using the actual goal on the field (in threshold editor im sure u guys rmb this)
   //check that it can see the colour even if its far away 
-
   send_us();
-  print_us(); //check that all US are correct, put bot on the field and check if coordinates are correct
+  print_us();
+  upd_coords(); //check that all US are correct, put bot on the field and check if coordinates are correct
 
   //check ball orbit: 
-  drive(orbit_ball(), 0.2);
+  // drive(orbit_ball(), 0.2);
 
   //check compass angle is correct:
-  Serial.println(compass_angle());
+  // Serial.println(compass_angle());
 
   //calibrate FRONT_LIDAR_MAX & BACK_LIDAR_MAX: run each one separately, for each bot also, change in config
   //pls change correct one, for WHITE and GREY bot 
-  Serial.println(getirfront(9)); //front
-  Serial.println(getirback(9)); //back
-  
+  // Serial.println(getirfront(9)); //front
+  // Serial.println(getirback(9)); //back
+    // Serial.println(interpolate()); 
   //once u r done run the actual code (striker.cpp and goalie.cpp)
   //check acceleration and kicker stuff 
   //if ball in ballcap, it will turn to face opponents goal, accelerate, & kick if its close enough to the goal
-
+  // Serial.println(in_bcz());
 
 
 
